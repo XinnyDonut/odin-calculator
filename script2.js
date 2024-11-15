@@ -3,17 +3,31 @@ let num2=null;
 let operator=null;
 let switchScreen=false;
 let highlighted=false;
+
 const allBtn=document.querySelectorAll('button');
 const equalBtn=document.querySelector('#equal')
 const digitBtn=document.querySelectorAll(".num");
 const operatorBtn=document.querySelectorAll('.operator')
 const clearBtn=document.querySelector("#ac");
 const displayArea=document.querySelector(".input");
+const percentBtn=document.querySelector('#percent')
+const floatPointBtn=document.querySelector('#float')
 displayArea.textContent="0";
 
 allBtn.forEach(btn=>btn.addEventListener('click',function(){
     operatorBtn.forEach(btn=>btn.style.backgroundColor="blanchedalmond")
 }))
+
+percentBtn.addEventListener('click',function(){
+    displayNum=parseFloat(displayArea.textContent)
+    if(isTooLong(displayNum)){
+        displayNum.toFixed(6)
+    }
+    displayArea.textContent=displayNum*0.01
+    if(num1!=null&&operator==null){
+        num1=num1*0.01
+    }
+})
 
 clearBtn.addEventListener('click',e=>{
     displayArea.textContent="0";
@@ -21,6 +35,14 @@ clearBtn.addEventListener('click',e=>{
     num2=null;
     operator=null;
 })
+
+floatPointBtn.addEventListener('click',function(){
+    str=displayArea.textContent
+    if(displayArea.textContent!=""&&!str.includes(".")){
+        displayArea.textContent+="."
+    }
+})
+
 
 
 digitBtn.forEach(btn=>btn.addEventListener('click',e=>{
@@ -41,9 +63,9 @@ digitBtn.forEach(btn=>btn.addEventListener('click',e=>{
         switchScreen=false;
     }
     if(num1!=null&&operator==null){
-        num1=parseInt(displayArea.textContent);
+        num1=parseFloat(displayArea.textContent);
     }
-
+   
 }))
 
 operatorBtn.forEach(btn=>btn.addEventListener('click',e=>{
@@ -51,18 +73,18 @@ operatorBtn.forEach(btn=>btn.addEventListener('click',e=>{
     btn.style.backgroundColor="orange"    
     switchScreen=true;
     if(num1==null){
-        num1=parseInt(displayArea.textContent)    
+        num1=parseFloat(displayArea.textContent)    
     }
     if(operator==null){
         operator=btn.textContent;
     }else{
-        num2=parseInt(displayArea.textContent)
+        num2=parseFloat(displayArea.textContent)
         let result=operate(num1,num2,operator)
 
        if(result!=null){
-            if(isTooLong(result)){
-                result=result.toFixed(3)
-            }
+            if(isTooLong(result,10)){
+                result=result.toFixed(3)  
+            }    
             displayArea.textContent=result; 
         } 
         num1=result;
@@ -79,12 +101,12 @@ equalBtn.addEventListener('click',e=>{
         return
     }
     if(num1!=null&&operator!=null){
-        num2=parseInt(displayArea.textContent);
+        num2=parseFloat(displayArea.textContent);
         let result=operate(num1,num2,operator);
         if(result!=null){
-            if(isTooLong(result)){
-                result=result.toFixed(3)
-            }
+            if(isTooLong(result,10)){
+                result=result.toFixed(3)  
+            }    
             displayArea.textContent=result; 
         }     
         num1=result;
@@ -93,14 +115,14 @@ equalBtn.addEventListener('click',e=>{
     }
 })
 
-function isTooLong(result){
+function isTooLong(result,length){
     const resultString=result.toString();  
     const i=resultString.indexOf(".");
     const sub=resultString.substring(i+1);
     if(i===-1){
         return false;
     }
-    return sub.length>3
+    return sub.length>length
     
 }
 
