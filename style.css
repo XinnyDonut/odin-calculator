@@ -1,6 +1,7 @@
-*{
+*,*::before,*::after{
     box-sizing: border-box;
     margin:0;
+
 }
 html,body{
     height:100%;
@@ -25,9 +26,7 @@ body{
 }
 
 .row{
-    display: flex;
-    
-   
+    display: flex;   
 }
 
 .input{
@@ -49,3 +48,11 @@ button.double-size{
     width:160px;
 }
 
+.operator,#equal{
+    background-color:blanchedalmond;
+}
+
+button:active {
+    transform: scale(0.95);
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+}
